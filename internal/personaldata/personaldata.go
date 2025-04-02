@@ -7,8 +7,8 @@ import "fmt"
 // Ниже создайте структуру Personal
 type Personal struct {
 	Name   string
-	Weight int
-	Height int
+	Weight float64
+	Height float64
 }
 
 // Ниже создайте метод Print()

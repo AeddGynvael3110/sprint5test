@@ -1,5 +1,7 @@
 package trainings
 
+//package main
+
 import (
 	"errors"
 	"fmt"
@@ -30,11 +32,13 @@ func (t *Training) Parse(datastring string) (err error) {
 		return errors.New("ошибка конвертации шагов в int")
 	}
 	t.Steps = steps
+	if t.Steps < 0 {
+		return errors.New("ошибка: отрицательное число шагов")
+	}
 	active := slice[1]
 	if active == "Бег" {
 		t.TrainingType = "Бег"
-	}
-	if active == "Ходьба" {
+	} else if active == "Ходьба" {
 		t.TrainingType = "Ходьба"
 	} else {
 		return errors.New("неизвестный тип тренировки")
@@ -44,33 +48,47 @@ func (t *Training) Parse(datastring string) (err error) {
 		return errors.New("ошибка парсинга продолжительности тренировки")
 	}
 	t.Duration = duration
+	return
 }
 
 // создайте метод ActionInfo()
 func (t Training) ActionInfo() (string, error) {
-	distance := spentspentenergy.Distance(steps)
-	duration := t.Duration
-	if duration <= 0 {
+	distance := spentenergy.Distance(t.Steps)
+	if t.Duration <= 0 {
 		return "", errors.New("ошибка: продолжительность меньше или равна 0")
 	}
-	meanSpeed := spentenergy.MeanSpeed(steps, duration)
-	var trType string
+	meanSpeed, err := spentenergy.MeanSpeed(t.Steps, t.Duration)
+	if err != nil {
+		return "", errors.New("ошибка получения средней скорости")
+	}
+	var spentCal float64
+
 	if t.TrainingType == "Бег" {
-		trType = "Бег"
-		spentCal, err := spentenergy.RunningSpentCalories(steps, weight, duration)
+		spentCal, err = spentenergy.RunningSpentCalories(t.Steps, float64(t.Weight), t.Duration)
 		if err != nil {
 			return "", errors.New("ошибка получения потраченных калорий")
 		}
-	}
-	if t.TrainingType == "Ходьба" {
-		trType = "Ходьба"
-		spentCal, err := spentenergy.WalkingSpentCalories(steps, weight, height, duration)
+	} else if t.TrainingType == "Ходьба" {
+		spentCal, err = spentenergy.WalkingSpentCalories(t.Steps, float64(t.Weight), float64(t.Height), t.Duration)
 		if err != nil {
 			return "", errors.New("ошибка получения потраченных калорий")
 		}
 	} else {
-		return "unknown training type", err
+		return "ошибка", errors.New("unknown training type")
 	}
-	result := fmt.Printf("Тип тренировки: %s\nДлительность: %v\nДистанция: %.2f\nСкорость: %.2f\nСожгли калорий: %.2f", trType, duration, distance, meanSpeed, spentCal)
+	result := fmt.Sprintf("Тип тренировки: %s\nДлительность: %v ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f", t.TrainingType, t.Duration.Hours(), distance, meanSpeed, spentCal)
 	return result, nil
 }
+
+// код для проверки работы методов
+//func main() {
+//	p := personaldata.Personal{Name: "Anna", Weight: 80, Height: 180}
+//	training := Training{Steps: 8765, TrainingType: "Бег", Duration: time.Duration(90) * time.Minute, Personal: p}
+//	test := training.Parse("8765,Бег,1h30m")
+//	fmt.Println(test)
+//	fmt.Println(training, p)
+//	test2, err := training.ActionInfo()
+//	fmt.Println(test2, err)
+//	fmt.Println(spentenergy.RunningSpentCalories(training.Steps, float64(p.Weight), training.Duration))
+//	fmt.Println(spentenergy.WalkingSpentCalories(training.Steps, float64(p.Weight), float64(p.Height), training.Duration))
+//}

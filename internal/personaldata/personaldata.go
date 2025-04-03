@@ -1,7 +1,5 @@
 package personaldata
 
-//package main
-
 import "fmt"
 
 // Ниже создайте структуру Personal
@@ -17,10 +15,3 @@ func (p Personal) Print() {
 	fmt.Println("Вес", p.Weight)
 	fmt.Println("Рост", p.Height)
 }
-
-// проверка работоспособности кода
-//func main() {
-//personal := Personal{Name: "Anna", Weight: 80, Height: 180}
-//fmt.Println(personal)
-//personal.Print()
-//}

@@ -1,13 +1,6 @@
 package actioninfo
 
-//package main
-
-import (
-	"fmt"
-	//"time"
-	//"github.com/AeddGynvael3110/sprint5test/internal/personaldata"
-	//"github.com/AeddGynvael3110/sprint5test/internal/trainings"
-)
+import "fmt"
 
 // создайте интерфейс DataParser
 type DataParser interface {
@@ -19,7 +12,7 @@ type DataParser interface {
 func Info(dataset []string, dp DataParser) {
 	for _, value := range dataset {
 		if err := dp.Parse(value); err != nil {
-			fmt.Println("Ошибка парсинга:", err)
+			fmt.Println("ошибка парсинга:", err)
 			continue
 		}
 		result, err := dp.ActionInfo()
@@ -30,20 +23,3 @@ func Info(dataset []string, dp DataParser) {
 		fmt.Println(result)
 	}
 }
-
-//func main() {
-//	dataset := []string{
-//		"2555,Ходьба,2h30m",
-//		"биба",
-//		"",
-//		"-300,Бег,2h30m",
-//		"биба,Ходьба,2h30m",
-//		"4000,Ходьба,400",
-//	}
-//
-//	p := personaldata.Personal{Name: "Anna", Weight: 80, Height: 180}
-//
-//	training := trainings.Training{Steps: 8765, TrainingType: "Бег", Duration: time.Duration(90) * time.Minute, Personal: p}
-//
-//	Info(dataset, &training)
-//}

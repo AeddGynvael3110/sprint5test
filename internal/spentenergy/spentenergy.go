@@ -34,11 +34,11 @@ const (
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 	// чек на отрицательный вес\рост менее
 	if weight < 0 || height < 0 {
-		return 0, fmt.Errorf("ошибка: вес или рост менее 0")
+		return 0, fmt.Errorf("вес или рост менее 0")
 	}
 	// чек на отрицательную продолжительность
 	if duration < 0 {
-		return 0, fmt.Errorf("ошибка: продолжительность не может быть отрицательной")
+		return 0, fmt.Errorf("продолжительность не может быть отрицательной")
 	}
 	meanSpeed, err := MeanSpeed(steps, duration)
 	if err != nil {
@@ -66,10 +66,10 @@ const (
 // Создайте функцию ниже.
 func RunningSpentCalories(steps int, weight float64, duration time.Duration) (float64, error) {
 	if weight < 0 {
-		return 0, fmt.Errorf("ошибка: вес не может быть отрицательным")
+		return 0, fmt.Errorf("вес не может быть отрицательным")
 	}
 	if duration < 0 {
-		return 0, fmt.Errorf("ошибка: продолжительность не может быть отрицательной")
+		return 0, fmt.Errorf("продолжительность не может быть отрицательной")
 	}
 	meanSpeed, err := MeanSpeed(steps, duration)
 	if err != nil {
@@ -90,7 +90,7 @@ func RunningSpentCalories(steps int, weight float64, duration time.Duration) (fl
 func MeanSpeed(steps int, duration time.Duration) (float64, error) {
 	// чек на продолжительность < 0
 	if duration < 0 {
-		return 0, fmt.Errorf("ошибка: продолжительность не может быть отрицательной")
+		return 0, fmt.Errorf("продолжительность не может быть отрицательной")
 	}
 	// получаем дистанцию из функции
 	distance := Distance(steps)
@@ -109,6 +109,6 @@ func MeanSpeed(steps int, duration time.Duration) (float64, error) {
 //
 // Создайте функцию ниже
 func Distance(steps int) float64 {
-	distance := (float64(steps) * lenStep) / float64(mInKm)
+	distance := (float64(steps) * lenStep) / mInKm
 	return distance
 }
